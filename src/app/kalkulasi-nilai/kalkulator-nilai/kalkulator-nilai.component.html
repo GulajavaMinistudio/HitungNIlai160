@@ -1,0 +1,67 @@
+<body>
+
+<div class="row">
+
+  <form class="col s8">
+
+    <!-- nilai tugas -->
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="input_tugas" type="text">
+        <label for="input_tugas" data-error="Isi nilai tugas dengan benar">Nilai Tugas (20%)</label>
+      </div>
+    </div>
+
+    <!-- nilai uts-->
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="input_nilai_uts" type="text">
+        <label for="input_nilai_uts" data-error="Isi nilai UTS dengan benar">Nilai UTS (35%)</label>
+      </div>
+    </div>
+
+    <!-- nilai uas -->
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="input_nilai_uas" type="text">
+        <label for="input_nilai_uas" data-error="Isi nilai UAS dengan benar">Nilai UAS (45%)</label>
+      </div>
+    </div>
+
+    <!--nilai akhir-->
+    <div class="row">
+      <div class="input-field col s12">
+        <input disabled value="I am not editable" id="disabled_nilai_akhir" type="text" class="validate">
+        <label for="disabled_nilai_akhir">Nilai Akhir</label>
+      </div>
+    </div>
+
+    <!-- nilai huruf -->
+    <div class="row">
+      <div class="input-field col s12">
+        <input disabled value="I am not editable" id="disabled_nilai_huruf" type="text" class="validate">
+        <label for="disabled_nilai_huruf">Nilai Huruf</label>
+      </div>
+    </div>
+
+    <!-- nilai predikat -->
+    <div class="row">
+      <div class="input-field col s12">
+        <input disabled value="I am not editable" id="disabled_nilai_predikat" type="text" class="validate">
+        <label for="disabled_nilai_predikat">Predikat Nilai</label>
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" class="btn waves-effect waves-light red">Hitung Nilai
+        <i class="material-icons right">send</i>
+      </button>
+
+      <button type="submit" class="btn waves-effect waves-light green">Setelan Kalkulator</button>
+    </div>
+
+  </form>
+
+</div>
+
+</body>
