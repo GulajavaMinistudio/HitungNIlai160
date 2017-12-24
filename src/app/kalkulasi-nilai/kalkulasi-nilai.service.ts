@@ -11,6 +11,6 @@ export class KalkulasiNilaiService {
 
     const nilaiAkhir = (nilaiTugas * 20 / 100) + (nilaiUTS * 35 / 100) + (nilaiUAS * 45 / 100);
 
-    return '';
+    return nilaiAkhir.toString();
   }
 }
