@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { StorageItem } from './localstorages/storage-item';
 
 @Injectable()
-export class StoresOpsiSetelanService {
+export class StoresLocalDataService {
 
   isLocalStorageSupported = false;
 
@@ -100,6 +100,7 @@ export class StoresOpsiSetelanService {
     } else {
       data = null;
     }
+
     return data;
   }
 

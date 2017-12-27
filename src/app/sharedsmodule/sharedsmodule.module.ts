@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoresOpsiSetelanService } from './stores-opsi-setelan.service';
+import { StoresLocalDataService } from './stores-data.service';
 
 @NgModule({
   imports: [
@@ -8,7 +8,7 @@ import { StoresOpsiSetelanService } from './stores-opsi-setelan.service';
   ],
   declarations: [],
   providers: [
-    StoresOpsiSetelanService
+    StoresLocalDataService
   ]
 })
 export class SharedsmoduleModule {
