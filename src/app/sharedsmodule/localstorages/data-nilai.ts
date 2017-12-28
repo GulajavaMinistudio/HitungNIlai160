@@ -1,4 +1,4 @@
-class DataNilai {
+class DataNilaiPengali {
 
   public stringNilaiTugas = '0';
   public stringNilaiUTS = '0';
@@ -26,4 +26,4 @@ class DataNilaiKonversi {
   }
 }
 
-export { DataNilai, DataNilaiKonversi };
+export { DataNilaiPengali, DataNilaiKonversi };

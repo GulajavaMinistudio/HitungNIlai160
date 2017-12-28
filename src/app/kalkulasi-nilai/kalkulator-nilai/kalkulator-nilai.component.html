@@ -11,40 +11,55 @@
 
         <form class="ui form">
 
-          <!-- nilai tugas -->
+          <!-- nilai tugas  default 20 %-->
           <div class="field">
-            <label for="input_tugas">Nilai Tugas (20%)</label>
-            <input id="input_tugas" type="text">
+            <label for="input_tugas">Nilai Tugas ({{nilaiTugasKet}})</label>
+            <input id="input_tugas" type="text" name="nilai_tugas" [(ngModel)]="nilaiTugas">
           </div>
 
-          <!-- nilai uts-->
-          <div class="field">
-            <label for="input_nilai_uts" data-error="Isi nilai UTS dengan benar">Nilai UTS (35%)</label>
-            <input id="input_nilai_uts" type="text">
+          <div class="ui negative message" *ngIf="!isNilaiTugasValid">
+            <p>Silahkan isi nilai tugas dengan benar</p>
           </div>
 
-          <!-- nilai uas -->
+          <!-- nilai uts default 35 %-->
           <div class="field">
-            <label for="input_nilai_uas" data-error="Isi nilai UAS dengan benar">Nilai UAS (45%)</label>
-            <input id="input_nilai_uas" type="text">
+            <label for="input_nilai_uts" data-error="Isi nilai UTS dengan benar">Nilai UTS ({{nilaiUTSKet}})</label>
+            <input id="input_nilai_uts" type="text" name="nilai_uts" [(ngModel)]="nilaiUTS">
+          </div>
+
+          <div class="ui negative message" *ngIf="!isNilaiUTSValid">
+            <p>Silahkan isi nilai Ujian Tengah Semester dengan benar</p>
+          </div>
+
+          <!-- nilai uas default 45 % -->
+          <div class="field">
+            <label for="input_nilai_uas" data-error="Isi nilai UAS dengan benar">Nilai UAS ({{nilaiUASKet}})</label>
+            <input id="input_nilai_uas" type="text" name="nilai_uas" [(ngModel)]="nilaiUAS">
+          </div>
+
+          <div class="ui negative message" *ngIf="!isNilaiUASValid">
+            <p>Silahkan isi nilai Ujian Akhir Semester dengan benar</p>
           </div>
 
           <!--nilai akhir-->
           <div class="field">
             <label for="disabled_nilai_akhir">Nilai Akhir</label>
-            <input disabled value="I am not editable" id="disabled_nilai_akhir" type="text" class="validate">
+            <input disabled value="I am not editable" id="disabled_nilai_akhir" type="text" [(ngModel)]="nilaiAkhir"
+                   name="nilai_akhir">
           </div>
 
           <!-- nilai huruf -->
           <div class="field">
             <label for="disabled_nilai_huruf">Nilai Huruf</label>
-            <input disabled value="I am not editable" id="disabled_nilai_huruf" type="text" class="validate">
+            <input disabled value="belum tersedia" id="disabled_nilai_huruf" type="text" [(ngModel)]="nilaiHuruf"
+                   name="nilai_huruf">
           </div>
 
           <!-- nilai predikat -->
           <div class="field col">
             <label for="disabled_nilai_predikat">Predikat Nilai</label>
-            <input disabled value="I am not editable" id="disabled_nilai_predikat" type="text" class="validate">
+            <input disabled value="belum tersedia" id="disabled_nilai_predikat" type="text"
+                   [(ngModel)]="nilaiPredikatKategori" name="nilai_predikat">
           </div>
 
         </form>
@@ -53,7 +68,7 @@
       <!-- tombol -->
       <div class="extra content">
         <div class="ui right floated" style="float: right;">
-          <button type="submit" class="ui blue button">Hitung</button>
+          <button type="submit" class="ui blue button" (click)="getDataHitunganNilai()">Hitung</button>
           <button type="submit" class="ui green button">Reset</button>
         </div>
       </div>

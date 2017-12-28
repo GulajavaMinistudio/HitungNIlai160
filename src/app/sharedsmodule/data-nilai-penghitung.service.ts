@@ -5,7 +5,7 @@ import {
   DEFAULT_PENGALI_UTS
 } from './konstan-app';
 import { UtilanPelengkap } from './utils-pelengkap';
-import { DataNilai } from './localstorages/data-nilai';
+import { DataNilaiPengali } from './localstorages/data-nilai';
 
 @Injectable()
 export class DataNilaiPenghitungService {
@@ -63,7 +63,7 @@ export class DataNilaiPenghitungService {
         const mstringDefaultPengaliUTS = this.storesLocal.getDataWithKey(DATA_PENGALI_UTS);
         const mstringDefaultPengaliUAS = this.storesLocal.getDataWithKey(DATA_PENGALI_UAS);
 
-        const dataNilai = new DataNilai(mstringDefaultPengaliTugas, mstringDefaultPengaliUTS,
+        const dataNilai = new DataNilaiPengali(mstringDefaultPengaliTugas, mstringDefaultPengaliUTS,
           mstringDefaultPengaliUAS);
 
         resolve(dataNilai);

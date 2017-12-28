@@ -1,27 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataNilaiPenghitungService } from './sharedsmodule/data-nilai-penghitung.service';
-import { DataNilai } from './sharedsmodule/localstorages/data-nilai';
+import { DataNilaiPengali } from './sharedsmodule/localstorages/data-nilai';
 import { isNullOrUndefined } from 'util';
 import { StateCommunicationKomponenService } from './sharedsmodule/busdata/state-communication-komponen.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
-  dataNilaiStorage: DataNilai;
+  dataNilaiStorage: DataNilaiPengali;
+  subscriptions: Subscription;
 
   constructor(private initAwalService: DataNilaiPenghitungService,
               private busServiceToComp: StateCommunicationKomponenService) {
 
+    this.subscriptions = new Subscription();
   }
 
   ngOnInit(): void {
 
+    if (this.subscriptions.closed) {
+      this.subscriptions = new Subscription();
+    }
+
+    this.initSubscriberFromSettings();
+
     // cek data awal tersedia
     this.checkDataAwalTersedia();
+  }
+
+  ngOnDestroy(): void {
+
+    this.subscriptions.unsubscribe();
+  }
+
+  initSubscriberFromSettings() {
+
+    this.busServiceToComp.notifRefreshData$.subscribe(
+      () => {
+        this.getDataAwalLocalStorageFromSettings();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // cek apakah local storage tersimpan
@@ -69,7 +95,7 @@ export class AppComponent implements OnInit {
 
     this.initAwalService.getDataLocalStorageSemua()
       .then(
-        (dataNilai: DataNilai) => {
+        (dataNilai: DataNilaiPengali) => {
 
           if (!isNullOrUndefined(dataNilai)) {
             this.dataNilaiStorage = dataNilai;
@@ -86,7 +112,40 @@ export class AppComponent implements OnInit {
 
   // kirim ke komponen anak
   sendBusKeKomponen() {
-    console.log('data ' + JSON.stringify(this.dataNilaiStorage));
-    this.busServiceToComp.sendBusDataNilaiToKomponen(this.dataNilaiStorage);
+    setTimeout(
+      () => {
+        this.busServiceToComp.sendBusDataNilaiToKomponen(this.dataNilaiStorage);
+      }, 500
+    );
+  }
+
+
+  getDataAwalLocalStorageFromSettings() {
+
+    this.initAwalService.getDataLocalStorageSemua()
+      .then(
+        (dataNilai: DataNilaiPengali) => {
+
+          if (!isNullOrUndefined(dataNilai)) {
+            this.dataNilaiStorage = dataNilai;
+            this.sendBusKeKomponenHomeFromSettings();
+          }
+        }
+      )
+      .catch(
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+
+  // kirim ke komponen kalkulator dengan data yang baru
+  sendBusKeKomponenHomeFromSettings() {
+    setTimeout(
+      () => {
+        this.busServiceToComp.sendBusDataNilaiToKomponen(this.dataNilaiStorage);
+      }, 2000
+    );
   }
 }

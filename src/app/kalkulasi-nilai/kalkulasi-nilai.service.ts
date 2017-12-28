@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StoresLocalDataService } from '../sharedsmodule/stores-data.service';
-import { DataNilai, DataNilaiKonversi } from '../sharedsmodule/localstorages/data-nilai';
+import { DataNilaiPengali, DataNilaiKonversi } from '../sharedsmodule/localstorages/data-nilai';
 import { isNullOrUndefined } from 'util';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
@@ -32,39 +32,6 @@ export class KalkulasiNilaiService {
     this.utilPelengkap = new UtilanPelengkap();
   }
 
-  /**
-   * cek apakah nilai isian sudah benar atau belum
-   * @param {DataNilai} dataNilai
-   * @return {DataNilaiKonversi}
-   */
-  cekNilaiIsian(dataNilai: DataNilai): DataNilaiKonversi {
-
-    const dataNilaiKonversi = new DataNilaiKonversi();
-
-    if (!isNullOrUndefined(dataNilai)) {
-
-      try {
-        const stringNilaiTugas = dataNilai.stringNilaiTugas;
-        const stringNilaiUTS = dataNilai.stringNilaiUTS;
-        const stringNilaiUAS = dataNilai.stringNilaiUAS;
-
-        const floatNilaiTugas = parseFloat(stringNilaiTugas);
-        const floatNilaiUTS = parseFloat(stringNilaiTugas);
-        const floatNilaiUAS = parseFloat(stringNilaiTugas);
-
-        dataNilaiKonversi.stringNilaiTugas = stringNilaiTugas;
-        dataNilaiKonversi.stringNilaiUTS = stringNilaiUTS;
-        dataNilaiKonversi.stringNilaiUAS = stringNilaiUAS;
-        dataNilaiKonversi.numberNilaiTugas = floatNilaiTugas;
-        dataNilaiKonversi.numberNilaiUTS = floatNilaiUTS;
-        dataNilaiKonversi.numberNilaiUAS = floatNilaiUAS;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    return dataNilaiKonversi;
-  }
 
   /**
    * kalkulasi nilai pelajaran berdasarkan data nilai yang dimasukkan pengguna
@@ -93,6 +60,10 @@ export class KalkulasiNilaiService {
               this.stringDefaultPengaliTugas = mstringDefaultPengaliTugas;
               this.stringDefaultPengaliUTS = mstringDefaultPengaliUTS;
               this.stringDefaultPengaliUAS = mstringDefaultPengaliUAS;
+
+              dataNilaiKonversi.numberNilaiTugas = parseFloat(dataNilaiKonversi.stringNilaiTugas);
+              dataNilaiKonversi.numberNilaiUTS = parseFloat(dataNilaiKonversi.stringNilaiUTS);
+              dataNilaiKonversi.numberNilaiUAS = parseFloat(dataNilaiKonversi.stringNilaiUAS);
             }
           }
         } catch (e) {
@@ -115,7 +86,8 @@ export class KalkulasiNilaiService {
 
         // const nilaiAkhir = (nilaiTugas * 20 / 100) + (nilaiUTS * 35 / 100) + (nilaiUAS * 45 / 100);
         try {
-          nilaiAkhir = (numberNilaiTugas * this.numberDefaultPengaliTugas / 100) + (numberNilaiUTS * this.numberDefaultPengaliUTS / 100)
+          nilaiAkhir = (numberNilaiTugas * this.numberDefaultPengaliTugas / 100)
+            + (numberNilaiUTS * this.numberDefaultPengaliUTS / 100)
             + (numberNilaiUAS * this.numberDefaultPengaliUAS / 100);
           datanilaikonversi.numberNilaiAkhir = nilaiAkhir;
         } catch (e) {

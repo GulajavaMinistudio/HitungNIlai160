@@ -11,17 +11,15 @@ class UtilanPelengkap {
   isValidNumberFloatBenar(str): boolean {
 
     let booleanIsTrue = false;
-    if (!str || str.trim().length === 0) {
-      try {
+    if (str) {
+      if (str.trim().length > 0) {
         const numberFloat = parseFloat(str);
-        if (numberFloat >= 0.0) {
-          booleanIsTrue = true;
-        } else {
-          booleanIsTrue = false;
-        }
-      } catch (e) {
-        console.log(e);
+        booleanIsTrue = numberFloat >= 0.0;
+      } else {
+        booleanIsTrue = false;
       }
+    } else {
+      booleanIsTrue = false;
     }
     return booleanIsTrue;
   }
