@@ -11,11 +11,16 @@ before_script:
 #  - apt-get --quiet update --yes
 #  - npm install -g semver
 #  - npm i -g npm
+#  - npm install -g @angular/cli@latest
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo --quiet -y "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-#  - npm install -g @angular/cli@latest
   - apt-get update && apt-get install yarn
   - yarn global add @angular/cli@latest
+  - yarn global add gulp
+  - npm install semantic-ui --save
+  - cd semantic/
+  - gulp build
+  - cd ..
 
 stages:
   - test
