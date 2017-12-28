@@ -1,7 +1,7 @@
 image: node:8
 
 before_script:
-  - apt-get --quiet update --yes
+#  - apt-get --quiet update --yes
 #  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
 #  install node js
@@ -11,7 +11,11 @@ before_script:
 #  - apt-get --quiet update --yes
 #  - npm install -g semver
 #  - npm i -g npm
-  - npm install -g @angular/cli@latest
+  - curl --quiet -y -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  - echo --quiet -y "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+#  - npm install -g @angular/cli@latest
+  - apt-get update && apt-get install yarn
+  - yarn global add @angular/cli@latest
 
 stages:
   - test
@@ -21,7 +25,8 @@ stages:
 test:
   stage: test
   script:
-    - npm install
+#    - npm install
+    - yarn install
     - ng build
   artifacts:
     paths:
@@ -31,7 +36,8 @@ test:
 deploy:
   stage: deploy
   script:
-    - npm install
+#    - npm install
+    - yarn install
     - ng build --prod --aot --build-optimizer
   artifacts:
     paths:
