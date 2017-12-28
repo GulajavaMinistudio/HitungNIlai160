@@ -5,10 +5,10 @@ before_script:
   - apt --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
 #  install node js
-#  - apt --quiet install -y build-essential
+  - apt --quiet install -y build-essential
 #  - curl -sL https://deb.nodesource.com/setup_8.x | bash -
 #  - apt --quiet install -y nodejs
-#  - apt --quiet update --yes
+  - apt --quiet update --yes
   - npm i -g npm
   - npm install -g @angular/cli@latest
 
