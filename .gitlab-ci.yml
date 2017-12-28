@@ -2,15 +2,15 @@ image: node:8
 
 before_script:
   - apt-get --quiet update --yes
-  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+#  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
 #  install node js
-  - apt-get --quiet install -y build-essential
+#  - apt-get --quiet install -y build-essential
 #  - curl -sL https://deb.nodesource.com/setup_8.x | bash -
 #  - apt --quiet install -y nodejs
-  - apt-get --quiet update --yes
-  - npm install -g semver
-  - npm i -g npm
+#  - apt-get --quiet update --yes
+#  - npm install -g semver
+#  - npm i -g npm
   - npm install -g @angular/cli@latest
 
 stages:
