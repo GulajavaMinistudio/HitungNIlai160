@@ -18,6 +18,7 @@
           </div>
 
           <div class="ui negative message" *ngIf="!isNilaiTugasValid">
+            <i class="close icon" (click)="clickCloseDialog()"></i>
             <p>Silahkan isi nilai tugas dengan benar</p>
           </div>
 
@@ -28,6 +29,7 @@
           </div>
 
           <div class="ui negative message" *ngIf="!isNilaiUTSValid">
+            <i class="close icon" (click)="clickCloseDialog()"></i>
             <p>Silahkan isi nilai Ujian Tengah Semester dengan benar</p>
           </div>
 
@@ -38,6 +40,7 @@
           </div>
 
           <div class="ui negative message" *ngIf="!isNilaiUASValid">
+            <i class="close icon" (click)="clickCloseDialog()"></i>
             <p>Silahkan isi nilai Ujian Akhir Semester dengan benar</p>
           </div>
 

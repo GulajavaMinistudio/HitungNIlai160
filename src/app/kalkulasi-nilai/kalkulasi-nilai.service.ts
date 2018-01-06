@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { StoresLocalDataService } from '../sharedsmodule/stores-data.service';
-import { DataNilaiPengali, DataNilaiKonversi } from '../sharedsmodule/localstorages/data-nilai';
+import { DataNilaiKonversi } from '../sharedsmodule/localstorages/data-nilai';
 import { isNullOrUndefined } from 'util';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import {
-  DATA_PENGALI_TUGAS, DATA_PENGALI_UAS, DATA_PENGALI_UTS, DEFAULT_PENGALI_TUGAS, DEFAULT_PENGALI_UAS,
-  DEFAULT_PENGALI_UTS
-} from '../sharedsmodule/konstan-app';
+  DEFAULT_PENGALI_TUGAS, DEFAULT_PENGALI_UAS, DEFAULT_PENGALI_UTS, KEY_PENGALI_TUGAS, KEY_PENGALI_UAS,
+  KEY_PENGALI_UTS
+} from '../sharedsmodule/localstorages/pengali-nilai';
 import * as Predikat from '../sharedsmodule/localstorages/predikat-nilai';
 import { UtilanPelengkap } from '../sharedsmodule/utils-pelengkap';
 
@@ -45,17 +46,17 @@ export class KalkulasiNilaiService {
 
         // ambil dari local storage
         try {
-          const mstringDefaultPengaliTugas = this.storeSetelan.getDataWithKey(DATA_PENGALI_TUGAS);
-          const mstringDefaultPengaliUTS = this.storeSetelan.getDataWithKey(DATA_PENGALI_UTS);
-          const mstringDefaultPengaliUAS = this.storeSetelan.getDataWithKey(DATA_PENGALI_UAS);
+          const mstringDefaultPengaliTugas = this.storeSetelan.getDataWithKey(KEY_PENGALI_TUGAS);
+          const mstringDefaultPengaliUTS = this.storeSetelan.getDataWithKey(KEY_PENGALI_UTS);
+          const mstringDefaultPengaliUAS = this.storeSetelan.getDataWithKey(KEY_PENGALI_UAS);
 
           if (!isNullOrUndefined(mstringDefaultPengaliTugas)
             && !isNullOrUndefined(mstringDefaultPengaliUTS)
             && !isNullOrUndefined(mstringDefaultPengaliUAS)) {
 
-            if (this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliTugas)
-              && this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliUTS) &&
-              this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliUAS)) {
+            if (!this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliTugas)
+              && !this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliUTS) &&
+              !this.utilPelengkap.isEmptyStringsNulls(mstringDefaultPengaliUAS)) {
 
               this.stringDefaultPengaliTugas = mstringDefaultPengaliTugas;
               this.stringDefaultPengaliUTS = mstringDefaultPengaliUTS;
@@ -74,7 +75,7 @@ export class KalkulasiNilaiService {
         this.numberDefaultPengaliUTS = parseFloat(this.stringDefaultPengaliUTS);
         this.numberDefaultPengaliUAS = parseFloat(this.stringDefaultPengaliUAS);
 
-        observer.onNext(dataNilaiKonversi);
+        observer.next(dataNilaiKonversi);
       }
     ).map(
       datanilaikonversi => {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { DataNilaiPengali } from '../localstorages/data-nilai';
 
 @Injectable()
 export class StateCommunicationKomponenService {
@@ -15,13 +14,14 @@ export class StateCommunicationKomponenService {
   notifRefreshData$ = this.notifRefreshData.asObservable();
 
 
-  constructor() { }
-
-  sendBusDataNilaiToKomponen(dataNilai: DataNilaiPengali) {
-    this.dataNilaiBusSendHomeComponent.next(dataNilai);
+  constructor() {
   }
 
-  sendBusDataNotifikasiToKomponen() {
+  sendBusDataNilaiToKomponen(value: any) {
+    this.dataNilaiBusSendHomeComponent.next(value);
+  }
+
+  sendBusRefreshDataFromSettings() {
     this.notifRefreshData.next(true);
   }
 }

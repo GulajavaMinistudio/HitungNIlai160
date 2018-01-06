@@ -2,8 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { KalkulasiNilaiService } from '../kalkulasi-nilai.service';
 import { Subscription } from 'rxjs/Subscription';
 import { StateCommunicationKomponenService } from '../../sharedsmodule/busdata/state-communication-komponen.service';
-import { DataNilaiKonversi, DataNilaiPengali } from '../../sharedsmodule/localstorages/data-nilai';
 import { UtilanPelengkap } from '../../sharedsmodule/utils-pelengkap';
+import { DataNilaiKonversi } from '../../sharedsmodule/localstorages/data-nilai';
+import { singletonInstanceDataNilai as instanceNilai } from '../../sharedsmodule/localstorages/singleton-data-nilai';
+declare var jquery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-kalkulator-nilai',
@@ -27,7 +30,6 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
   nilaiUTSKet = '0%';
   nilaiUASKet = '0%';
 
-  dataNilaiVal: DataNilaiPengali;
   dataNilaiKonversi: DataNilaiKonversi;
   dataNilaiHasil: DataNilaiKonversi;
   utilanPelengkap: UtilanPelengkap;
@@ -45,8 +47,8 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.compositeSubscriber.closed) {
       this.compositeSubscriber = new Subscription();
+      this.subscribeDataBusKomponen();
     }
-    this.subscribeDataBusKomponen();
   }
 
   ngOnDestroy(): void {
@@ -57,14 +59,14 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
 
     this.compositeSubscriber.add(
       this.stateComService.dataNilaiBusSendHomeComponent$.subscribe(
-        datanilaiPengali => {
-          console.log('data json komponen ' + JSON.stringify(datanilaiPengali));
+        isSukses => {
 
           // set data
-          this.dataNilaiVal = datanilaiPengali;
-          this.nilaiTugasKet = this.dataNilaiVal.stringNilaiTugas + ' %';
-          this.nilaiUTSKet = this.dataNilaiVal.stringNilaiUTS + ' %';
-          this.nilaiUASKet = this.dataNilaiVal.stringNilaiUAS + ' %';
+          if (isSukses) {
+            this.nilaiTugasKet = instanceNilai.stringPengaliNilaiTugas + ' %';
+            this.nilaiUTSKet = instanceNilai.stringPengaliNilaiUTS + ' %';
+            this.nilaiUASKet = instanceNilai.stringPengaliNilaiUAS + ' %';
+          }
         },
         errors => {
           console.log(errors);
@@ -86,7 +88,6 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
 
         if (this.utilanPelengkap.isValidNumberFloatBenar(this.nilaiUAS)) {
 
-          console.log('semua nilai benar');
           this.dataNilaiKonversi = new DataNilaiKonversi();
           this.dataNilaiKonversi.stringNilaiTugas = this.nilaiTugas;
           this.dataNilaiKonversi.stringNilaiUTS = this.nilaiUTS;
@@ -98,11 +99,9 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
           this.isNilaiUASValid = false;
         }
       } else {
-        console.log('isi data UTS dengan benar');
         this.isNilaiUTSValid = false;
       }
     } else {
-      console.log('isi data tugas dengan benar');
       this.isNilaiTugasValid = false;
     }
   }
@@ -132,6 +131,22 @@ export class KalkulatorNilaiComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  clickCloseDialog() {
+
+    $('.message .close')
+      .closest('.message')
+      .transition('fade');
+
+    // reset status dialog ke true semua
+    setTimeout(
+      () => {
+        this.isNilaiTugasValid = true;
+        this.isNilaiUTSValid = true;
+        this.isNilaiUASValid = true;
+      }, 500
+    );
   }
 
 }

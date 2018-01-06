@@ -1,16 +1,3 @@
-class DataNilaiPengali {
-
-  public stringNilaiTugas = '0';
-  public stringNilaiUTS = '0';
-  public stringNilaiUAS = '0';
-
-  constructor(stringNilaiTugas: string, stringNilaiUTS: string, stringNilaiUAS: string) {
-    this.stringNilaiTugas = stringNilaiTugas;
-    this.stringNilaiUTS = stringNilaiUTS;
-    this.stringNilaiUAS = stringNilaiUAS;
-  }
-}
-
 class DataNilaiKonversi {
 
   public stringNilaiTugas = '';
@@ -26,4 +13,4 @@ class DataNilaiKonversi {
   }
 }
 
-export { DataNilaiPengali, DataNilaiKonversi };
+export { DataNilaiKonversi };

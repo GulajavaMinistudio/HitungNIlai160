@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { StoresLocalDataService } from './stores-data.service';
 import {
-  DATA_PENGALI_TUGAS, DATA_PENGALI_UAS, DATA_PENGALI_UTS, DEFAULT_PENGALI_TUGAS, DEFAULT_PENGALI_UAS,
-  DEFAULT_PENGALI_UTS
-} from './konstan-app';
+  DEFAULT_PENGALI_TUGAS, DEFAULT_PENGALI_UAS, DEFAULT_PENGALI_UTS, KEY_PENGALI_TUGAS, KEY_PENGALI_UAS,
+  KEY_PENGALI_UTS
+} from './localstorages/pengali-nilai';
 import { UtilanPelengkap } from './utils-pelengkap';
-import { DataNilaiPengali } from './localstorages/data-nilai';
+import {
+  DEFAULT_BATASBAWAH_NILAI_A, DEFAULT_BATASBAWAH_NILAI_B, DEFAULT_BATASBAWAH_NILAI_C, DEFAULT_BATASBAWAH_NILAI_D,
+  KEY_BATASBAWAH_NILAI_A, KEY_BATASBAWAH_NILAI_B, KEY_BATASBAWAH_NILAI_C, KEY_BATASBAWAH_NILAI_D
+} from './localstorages/batas-nilai';
+import { singletonInstanceDataNilai as instanceNilai } from './localstorages/singleton-data-nilai';
 
 @Injectable()
 export class DataNilaiPenghitungService {
@@ -16,18 +20,21 @@ export class DataNilaiPenghitungService {
     this.utilPelengkap = new UtilanPelengkap();
   }
 
-  // cek apakah sudah diinisialisasi atau belum
-  checkNilaiAwalTersedia(): any {
+  /**
+   * cek apakah nilai nilai pengali sudah diinisialisasi atau belum
+   * @return {any} balikan kelas DataNilai
+   */
+  checkNilaiPengaliTersedia(): any {
 
     return new Promise(
-      (resolve, reject) => {
+      (resolve) => {
 
         let isDataAwalTersedia = false;
 
         try {
-          const mstringDefaultPengaliTugas = this.storesLocal.getDataWithKey(DATA_PENGALI_TUGAS);
-          const mstringDefaultPengaliUTS = this.storesLocal.getDataWithKey(DATA_PENGALI_UTS);
-          const mstringDefaultPengaliUAS = this.storesLocal.getDataWithKey(DATA_PENGALI_UAS);
+          const mstringDefaultPengaliTugas = this.storesLocal.getDataWithKey(KEY_PENGALI_TUGAS);
+          const mstringDefaultPengaliUTS = this.storesLocal.getDataWithKey(KEY_PENGALI_UTS);
+          const mstringDefaultPengaliUAS = this.storesLocal.getDataWithKey(KEY_PENGALI_UAS);
 
           isDataAwalTersedia = this.utilPelengkap.isValidNumberFloatBenar(mstringDefaultPengaliTugas) &&
             this.utilPelengkap.isValidNumberFloatBenar(mstringDefaultPengaliUTS) &&
@@ -41,34 +48,113 @@ export class DataNilaiPenghitungService {
     );
   }
 
-  // inisialisasi data awal untuk penghitung
-  initDataAwalPengaliKalkulasi(): any {
+  /**
+   * inisialisasi data awal nilai pengali untuk penghitung
+   * @return {any} Balikkan nilai promise
+   */
+  initDataNilaiPengaliKalkulasi(): any {
 
     return new Promise(
-      (resolve, reject) => {
-        this.storesLocal.addDataLocalStorage(DATA_PENGALI_TUGAS, DEFAULT_PENGALI_TUGAS);
-        this.storesLocal.addDataLocalStorage(DATA_PENGALI_UTS, DEFAULT_PENGALI_UTS);
-        this.storesLocal.addDataLocalStorage(DATA_PENGALI_UAS, DEFAULT_PENGALI_UAS);
+      (resolve) => {
+        this.storesLocal.addDataLocalStorage(KEY_PENGALI_TUGAS, DEFAULT_PENGALI_TUGAS);
+        this.storesLocal.addDataLocalStorage(KEY_PENGALI_UTS, DEFAULT_PENGALI_UTS);
+        this.storesLocal.addDataLocalStorage(KEY_PENGALI_UAS, DEFAULT_PENGALI_UAS);
+
         resolve(true);
       }
     );
   }
 
-  // ambil data kembali dari local storage untuk penghitungnya
-  getDataLocalStorageSemua(): any {
+
+  /**
+   * ambil data kembali dari local storage untuk penghitungnya
+   * @return {any} object data nilai yang berisi nilai pengali
+   */
+  getDataPengaliLocalStorageSemua(): any {
 
     return new Promise(
-      (resolve, reject) => {
-        const mstringDefaultPengaliTugas = this.storesLocal.getDataWithKey(DATA_PENGALI_TUGAS);
-        const mstringDefaultPengaliUTS = this.storesLocal.getDataWithKey(DATA_PENGALI_UTS);
-        const mstringDefaultPengaliUAS = this.storesLocal.getDataWithKey(DATA_PENGALI_UAS);
+      (resolve) => {
+        const mstringDefaultPengaliTugas = this.storesLocal.getDataWithKey(KEY_PENGALI_TUGAS);
+        const mstringDefaultPengaliUTS = this.storesLocal.getDataWithKey(KEY_PENGALI_UTS);
+        const mstringDefaultPengaliUAS = this.storesLocal.getDataWithKey(KEY_PENGALI_UAS);
 
-        const dataNilai = new DataNilaiPengali(mstringDefaultPengaliTugas, mstringDefaultPengaliUTS,
-          mstringDefaultPengaliUAS);
+        instanceNilai.stringPengaliNilaiTugas = mstringDefaultPengaliTugas;
+        instanceNilai.stringPengaliNilaiUTS = mstringDefaultPengaliUTS;
+        instanceNilai.stringPengaliNilaiUAS = mstringDefaultPengaliUAS;
 
-        resolve(dataNilai);
+        resolve(true);
       }
     );
   }
 
+  // ========================== NILAI BATAS BAWAH KATEGORI NILAI ====================================
+
+  /**
+   * Cek apakah nilai batas bawah untuk kategori nilai sudah diinisialisasi
+   * @return {any}
+   */
+  checkDataBatasBawahNilaiTersedia(): any {
+
+    return new Promise(
+      (resolve, reject) => {
+
+        let isDataAwalTersedia = false;
+
+        try {
+          const batasBawahNilaiDefaultA = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_A);
+          const batasBawahNilaiDefaultB = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_B);
+          const batasBawahNilaiDefaultC = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_C);
+          const batasBawahNilaiDefaultD = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_D);
+
+          isDataAwalTersedia = this.utilPelengkap.isValidNumberFloatBenar(batasBawahNilaiDefaultA) &&
+            this.utilPelengkap.isValidNumberFloatBenar(batasBawahNilaiDefaultB) &&
+            this.utilPelengkap.isValidNumberFloatBenar(batasBawahNilaiDefaultC) &&
+            this.utilPelengkap.isValidNumberFloatBenar(batasBawahNilaiDefaultD);
+        } catch (e) {
+          console.log(e);
+          isDataAwalTersedia = false;
+        }
+        resolve(isDataAwalTersedia);
+      }
+    );
+  }
+
+
+  /**
+   * Inisialisasi data batas bawah untuk pengelompokan kategori nilai
+   * @return {any} nilai balikan adalah promise
+   */
+  initDataBatasBawahKategoriNilai(): any {
+
+    return new Promise(
+      (resolve) => {
+
+        this.storesLocal.addDataLocalStorage(KEY_BATASBAWAH_NILAI_A, DEFAULT_BATASBAWAH_NILAI_A);
+        this.storesLocal.addDataLocalStorage(KEY_BATASBAWAH_NILAI_B, DEFAULT_BATASBAWAH_NILAI_B);
+        this.storesLocal.addDataLocalStorage(KEY_BATASBAWAH_NILAI_C, DEFAULT_BATASBAWAH_NILAI_C);
+        this.storesLocal.addDataLocalStorage(KEY_BATASBAWAH_NILAI_D, DEFAULT_BATASBAWAH_NILAI_D);
+        resolve(true);
+      }
+    );
+  }
+
+  getDataBatasBawahSemua(): any {
+
+    return new Promise(
+      (resolve, reject) => {
+
+        const batasBawahDefaultA = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_A);
+        const batasBawahDefaultB = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_B);
+        const batasBawahDefaultC = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_C);
+        const batasBawahDefaultD = this.storesLocal.getDataWithKey(KEY_BATASBAWAH_NILAI_D);
+
+        instanceNilai.stringBatasNilaiA = batasBawahDefaultA;
+        instanceNilai.stringBatasNilaiB = batasBawahDefaultB;
+        instanceNilai.stringBatasNilaiC = batasBawahDefaultC;
+        instanceNilai.stringBatasNilaiD = batasBawahDefaultD;
+
+        resolve(true);
+      }
+    );
+  }
 }

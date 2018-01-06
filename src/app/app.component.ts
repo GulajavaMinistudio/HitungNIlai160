@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataNilaiPenghitungService } from './sharedsmodule/data-nilai-penghitung.service';
-import { DataNilaiPengali } from './sharedsmodule/localstorages/data-nilai';
-import { isNullOrUndefined } from 'util';
 import { StateCommunicationKomponenService } from './sharedsmodule/busdata/state-communication-komponen.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -12,7 +10,6 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  dataNilaiStorage: DataNilaiPengali;
   subscriptions: Subscription;
 
   constructor(private initAwalService: DataNilaiPenghitungService,
@@ -54,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
   checkDataAwalTersedia() {
 
     // cek status data awal tersedia
-    this.initAwalService.checkNilaiAwalTersedia()
+    this.initAwalService.checkNilaiPengaliTersedia()
       .then(
         (isDataTersedia) => {
           if (isDataTersedia) {
@@ -74,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
   // inisialisasi local storage data default
   initDataAwalLocalStorage() {
 
-    this.initAwalService.initDataAwalPengaliKalkulasi()
+    this.initAwalService.initDataNilaiPengaliKalkulasi()
       .then(
         (isbooleanSukses) => {
 
@@ -93,12 +90,11 @@ export class AppComponent implements OnInit, OnDestroy {
   // ambil data local storage
   getDataAwalLocalStorage() {
 
-    this.initAwalService.getDataLocalStorageSemua()
+    this.initAwalService.getDataPengaliLocalStorageSemua()
       .then(
-        (dataNilai: DataNilaiPengali) => {
+        (isSukses) => {
 
-          if (!isNullOrUndefined(dataNilai)) {
-            this.dataNilaiStorage = dataNilai;
+          if (isSukses) {
             this.sendBusKeKomponen();
           }
         }
@@ -114,20 +110,22 @@ export class AppComponent implements OnInit, OnDestroy {
   sendBusKeKomponen() {
     setTimeout(
       () => {
-        this.busServiceToComp.sendBusDataNilaiToKomponen(this.dataNilaiStorage);
-      }, 500
+        this.busServiceToComp.sendBusDataNilaiToKomponen(true);
+      }, 600
     );
   }
 
 
+  /**
+   * Ambil data awal kembali setelah setelan diperbarui di menu setelan
+   */
   getDataAwalLocalStorageFromSettings() {
 
-    this.initAwalService.getDataLocalStorageSemua()
+    this.initAwalService.getDataPengaliLocalStorageSemua()
       .then(
-        (dataNilai: DataNilaiPengali) => {
+        (isSukses) => {
 
-          if (!isNullOrUndefined(dataNilai)) {
-            this.dataNilaiStorage = dataNilai;
+          if (isSukses) {
             this.sendBusKeKomponenHomeFromSettings();
           }
         }
@@ -140,11 +138,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
 
-  // kirim ke komponen kalkulator dengan data yang baru
+  /**
+   * Kirim data awal kembali ke halaman bus komponen service
+   */
   sendBusKeKomponenHomeFromSettings() {
     setTimeout(
       () => {
-        this.busServiceToComp.sendBusDataNilaiToKomponen(this.dataNilaiStorage);
+        this.busServiceToComp.sendBusRefreshDataFromSettings();
       }, 2000
     );
   }

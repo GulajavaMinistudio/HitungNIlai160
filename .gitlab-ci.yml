@@ -17,7 +17,7 @@ before_script:
   - apt-get update && apt-get install yarn
   - yarn global add @angular/cli@latest
   - yarn global add gulp
-  - npm install semantic-ui --save
+  - yarn add semantic-ui
   - cd semantic/
   - gulp build
   - cd ..
