@@ -50,14 +50,14 @@ export class AppComponent implements OnInit, OnDestroy {
   // cek apakah local storage tersimpan
   checkDataAwalTersedia() {
 
-    // cek status data awal tersedia
+    // cek status data awal pengali tersedia
     this.initAwalService.checkNilaiPengaliTersedia()
       .then(
         (isDataTersedia) => {
           if (isDataTersedia) {
-            this.getDataAwalLocalStorage();
+            this.getDataAwalPengaliLocalStorage();
           } else {
-            this.initDataAwalLocalStorage();
+            this.initDataAwalPengaliLocalStorage();
           }
         }
       )
@@ -66,17 +66,35 @@ export class AppComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       );
+
+    // cek status data awal predikat nilai batas bawah
+    this.initAwalService.checkDataBatasBawahNilaiTersedia()
+      .then(
+        (isTersedia) => {
+
+          if (isTersedia) {
+            this.getDataAwalPengaliLocalStorage();
+          } else {
+            this.initDataAwalPengaliLocalStorage();
+          }
+        }
+      )
+      .catch(
+        (errors) => {
+          console.log(errors);
+        }
+      );
   }
 
-  // inisialisasi local storage data default
-  initDataAwalLocalStorage() {
+  // inisialisasi local storage data pengali default
+  initDataAwalPengaliLocalStorage() {
 
     this.initAwalService.initDataNilaiPengaliKalkulasi()
       .then(
         (isbooleanSukses) => {
 
           if (isbooleanSukses) {
-            this.getDataAwalLocalStorage();
+            this.getDataAwalPengaliLocalStorage();
           }
         }
       )
@@ -87,8 +105,24 @@ export class AppComponent implements OnInit, OnDestroy {
       );
   }
 
-  // ambil data local storage
-  getDataAwalLocalStorage() {
+  // inisialisasi local storage batas bawah default
+  initDataAwalBatasBawahNilai() {
+
+    this.initAwalService.initDataBatasBawahKategoriNilai()
+      .then(
+        (isSukses) => {
+
+        }
+      )
+      .catch(
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
+  // ambil data pengali local storage
+  getDataAwalPengaliLocalStorage() {
 
     this.initAwalService.getDataPengaliLocalStorageSemua()
       .then(
@@ -102,6 +136,22 @@ export class AppComponent implements OnInit, OnDestroy {
       .catch(
         (err) => {
           console.log(err);
+        }
+      );
+  }
+
+  // ambil data batas bawah nilai dan inisialisasi ke singleton
+  getDataBatasBawahNilaiLocalStorage() {
+
+    this.initAwalService.getDataBatasBawahSemua()
+      .then(
+        (isSukses) => {
+
+        }
+      )
+      .catch(
+        errors => {
+
         }
       );
   }
